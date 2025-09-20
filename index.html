@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <style>
+    body {
+        text-align: center;
+    }
+    div {
+        font-size: 3em;
+    }
     div > p{
         border-radius: 5px;
-        width: 200px;
         padding: 2px 8px;
     }
     .correct{
@@ -16,7 +21,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Guess the Price</title>
     <script>
         const arrayLength = 3;
         const arrayPrice = [12.9, 45.9, 99.9];
@@ -24,14 +29,15 @@
         const target = arrayPrice[rNumber];
         const imgTarget = rNumber + ".jpg";
         let count = 1;
+        const maxCount = 5;
         function putImage(){
             const img = document.getElementById("image");
             img.setAttribute("src", imgTarget);
-            img.setAttribute("alt", "from "+imgTarget);
+            img.setAttribute("alt", "from " + imgTarget);
         }
         function isNumber(){
             const number = document.getElementById("inputText").value;
-            if(isNaN(number)) alert("Please Enter a Number");
+            if(isNaN(number) || number == "") alert("Please Enter a Number");
             else generateBlock();
         }
         function generateBlock(){
@@ -39,22 +45,24 @@
             const newGuess = document.createElement("p");
             const inputGuess = document.getElementById("inputText").value;
             div.append(newGuess);
-            newGuess.append(count+" : ");
+            newGuess.append(count + "/" + maxCount + " | ");
             newGuess.append(inputGuess);
             if(inputGuess == target){
                 newGuess.setAttribute("class", "correct");
             }else if(inputGuess > target){
                 newGuess.setAttribute("class", "wrong");
-                newGuess.append("↓");
+                newGuess.append(" ↓");
             }else {
                 newGuess.setAttribute("class", "wrong");
-                newGuess.append("↑");
+                newGuess.append(" ↑");
             }
             count += 1;
         }
     </script>
 </head>
 <body onload="putImage()">
+    <h1>Guess the Price</h1>
+    <hr>
     <img id="image"/><br>
     <input type="text" width="10mx" id="inputText"/>
     <input type="button" value="ENTER" onclick="isNumber()"/>
