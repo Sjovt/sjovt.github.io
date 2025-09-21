@@ -3,13 +3,34 @@
 <style>
     body {
         text-align: center;
+        background-color: beige;
+    }
+    h1 {
+        font: bold;
+        font-family: sans-serif;
+        text-align: center;
+    }
+    input#inputText{
+        width: 240px;
+        height: 25px;
+    }
+    .frame{
+        width: 400px;
+        height: 400px;
+        background: darkslategrey;
+        margin: auto;
+        padding: 15px;
+        border-radius: 10px;
     }
     div {
         font-size: 3em;
     }
     div > p{
-        border-radius: 5px;
-        padding: 2px 8px;
+        width: 415px;
+        border-radius: 10px;
+        margin: auto;
+        margin-top: 10px;
+        text-align: center;
     }
     .correct{
         background-color: steelblue;
@@ -23,10 +44,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guess the Price</title>
     <script>
+        const data = [
+            {name : "樂天 Lotte - Almond Chocolate Crisp 杏仁脆米朱古力 (紙盒裝) 89克", price : "21.8", store : "百佳"},
+            {name : "嘉頓 Garden - 方包 8片", price : "13.5", store : "百佳"},
+            {name : "農心 Nong Shim - 石鍋拉麵 120克 x 5", price : "28", store : "百佳"},
+        ]
         const arrayLength = 3;
-        const arrayPrice = [12.9, 45.9, 99.9];
         const rNumber = Math.floor(Math.random() * arrayLength);
-        const target = arrayPrice[rNumber];
+        const target = data[rNumber].price;
         const imgTarget = rNumber + ".jpg";
         let count = 1;
         const maxCount = 5;
@@ -34,6 +59,8 @@
             const img = document.getElementById("image");
             img.setAttribute("src", imgTarget);
             img.setAttribute("alt", "from " + imgTarget);
+            document.getElementById("productName").innerHTML = data[rNumber].name + " - " + data[rNumber].store;
+            //document.getElementById("inputText").value = target;
         }
         function isNumber(){
             const number = document.getElementById("inputText").value;
@@ -45,16 +72,19 @@
             const newGuess = document.createElement("p");
             const inputGuess = document.getElementById("inputText").value;
             div.append(newGuess);
-            newGuess.append(count + "/" + maxCount + " | ");
+            newGuess.append(count + "/" + maxCount + " | $");
             newGuess.append(inputGuess);
             if(inputGuess == target){
                 newGuess.setAttribute("class", "correct");
+                newGuess.append(" 🎉");
             }else if(inputGuess > target){
                 newGuess.setAttribute("class", "wrong");
-                newGuess.append(" ↓");
-            }else {
+                if((inputGuess - target) >= target) newGuess.append(" ↓↓");
+                else newGuess.append(" ↓");
+            }else if(inputGuess < target){
                 newGuess.setAttribute("class", "wrong");
-                newGuess.append(" ↑");
+                if((target - inputGuess) >= target) newGuess.append(" ↑↑");
+                else newGuess.append(" ↑");
             }
             count += 1;
         }
@@ -63,9 +93,14 @@
 <body onload="putImage()">
     <h1>Guess the Price</h1>
     <hr>
-    <img id="image"/><br>
+    <div class="frame">
+        <img id="image" width="100%"/><br>
+    </div>
+    <h1 id="productName">name</h1>
+    
     <input type="text" width="10mx" id="inputText"/>
     <input type="button" value="ENTER" onclick="isNumber()"/>
+    
     <div id="guesses">
     </div>
 </body>
